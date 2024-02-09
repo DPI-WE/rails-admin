@@ -1,23 +1,37 @@
-# Replace with lesson title
+# Admin 🧑‍💼
 
-Add your content here!
+[Lecture Video](https://youtu.be/GBTeAbqeC14)
 
-[Read up here for full instructions with examples for lesson writing.](https://learn.firstdraft.com/lessons/3-how-to-write-a-lesson)
+Now that you've deployed your application, you'll need a way to monitor and administrate the data. This makes it easy to CRUD any record without needing to build a route/controller/view/etc. 
 
-## Heading 1
+I use the [rails admin](https://github.com/railsadminteam/rails_admin) gem in my own applications.
 
-Use `##` second or greater level headings (HTML `<h2>` and greater).
+Notes on install:
 
-### Heading 1.1
-
-Reference images from the `assets/` folder like so:
-
-```
-![](assets/example-image.png)
-```
-
-You can use the path `/assets/my-image.png` or `assets/my-image.png`, both will render in your local markdown preview; and when you connect the repository with a Learn Lesson, the assets will upload to Cloudinary and the paths will automatically be converted to a hosted URL, e.g.:
+`rails g rails_admin:install` will create a bunch of unnecessary files. You can discard everything except for `config/initializers/rails_admin.rb`.
+Set the rails admin asset source to sprockets `config.asset_source = :sprockets` in the `rails_admin.rb` file.
+If you're using pundit, you'll need to add some actions to your ApplicationPolicy. (dashboard?, export?, history?, show_in_app?)
+You will also need a way to identify admin users. The simplest way is to simply add an `admin` boolean column to users. (Make sure it defaults to false)
 
 ```
-![](https://res.cloudinary.com/[CLOUD_NAME]/image/upload/[IMAGE_VERSION]/appdev-lessons/[REPO_NAME]/[BRANCH]/[IMAGE_NAME])
+
+class AddAdminToUsers < ActiveRecord::Migration[7.1]
+
+  def change
+
+    add_column :users, :admin, :boolean, default: false, null: false
+
+  end
+
+end
+
+```
+
+After installing rails admin, make sure only authenticated admins can access it.
+
+```routes.rb
+
+authenticate :user, ->(user) { user.admin? } do
+  mount RailsAdmin::Engine, at: "admin", as: "rails_admin"
+end
 ```
