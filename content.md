@@ -9,9 +9,8 @@ I use the [rails admin](https://github.com/railsadminteam/rails_admin) gem in my
 <aside>
 Notes on install:
 
-Running `rails g rails_admin:install` will create a bunch of unnecessary files. You can discard everything except for `config/initializers/rails_admin.rb`.
+Running `rails g rails_admin:install` will create a bunch of unnecessary files. You can discard everything except for `config/initializers/rails_admin.rb`. Set the rails admin asset source to sprockets `config.asset_source = :sprockets` in the `rails_admin.rb` file. Or, simply set this in the generator `rails g rails_admin:install --asset=sprockets`.
 
-Set the rails admin asset source to sprockets `config.asset_source = :sprockets` in the `rails_admin.rb` file.
 If you're using pundit, you'll need to add some actions to your ApplicationPolicy. (dashboard?, export?, history?, show_in_app?)
 </aside>
 
